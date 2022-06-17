@@ -1,0 +1,37 @@
+	.data				#GLOBAL VARS
+msg:	.asciiz "Done!"
+space:	.asciiz	"\n"
+	.text				#INSTRUCTIONS
+main:	li $t1, 0x12345678		#$t1 = 0x12345678
+	li $t0, 0xf0000000		#$t1 = 0xf0000000
+		
+					#INITIALIZATION
+	add $s0, $0, 0			#int i = 0
+	
+	li $s2, 8			#end Condition 
+for:	beq $s0, $s2, done		#Start FOR
+
+	and $t2, $t0, $t1
+	srl $t2, $t2, 28
+	
+	sll $t1, $t1, 4
+	
+	la $a0, ($t2)
+	li $v0, 34
+	syscall
+	
+	la $a0, space
+	li $v0, 4
+	syscall
+	
+	add $s0,$s0,1			#i++
+	j for				#jump instruction for the 'for' cicle
+	
+done:	la $a0, msg			#$a0 = msg
+	li $v0, 4
+	syscall				#print($a0)
+		
+	li $v0, 10
+	syscall				#exit()
+	
+	
